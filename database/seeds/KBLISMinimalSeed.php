@@ -23,7 +23,7 @@ class KBLISMinimalSeed extends Seeder
             $users[] = User::create($user);
         }
         $this->command->info('users seeded');
-        
+
         /* Measure Types */
         $measureTypes = array(
             array("id" => "1", "name" => "Numeric Range"),
@@ -37,7 +37,7 @@ class KBLISMinimalSeed extends Seeder
             MeasureType::create($measureType);
         }
         $this->command->info('measure_types seeded');
-                
+
         /* Test Phase table */
         $test_phases = array(
           array("id" => "1", "name" => "Pre-Analytical"),

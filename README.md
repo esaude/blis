@@ -1,10 +1,10 @@
 ![image](https://travis-ci.org/ilabafrica/iBLIS.svg?branch=master)
 
-BLIS
+BLIS (Branch Laravel 5.1 of iLabAfrica )
 =====
 
 BLIS is a port of the Basic Laboratory Information System (<a href="https://github.com/C4G/BLIS">BLIS</a>) to the Laravel PHP Framework by iLabAfrica.
-BLIS was originally developed by C4G. 
+BLIS was originally developed by C4G.
 
 You can test and view the application [here](http://blis.ilabafrica.ac.ke:8080/).
 
@@ -17,7 +17,7 @@ Requirements
 Installation
 -----------
 ##### DOCKER
-The easiest way to install is using docker, follow instruction [here](https://github.com/ilabafrica/iblis-contrib-docker) to install via docker. 
+The easiest way to install is using docker, follow instruction [here](https://github.com/ilabafrica/iblis-contrib-docker) to install via docker.
 
 ##### FROM SOURCE
 

@@ -9,7 +9,7 @@ return array(
 	*/
 
 	'name' => 'BLIS',
-	
+
 	/*
 	|--------------------------------------------------------------------------
 	|	Application Version
@@ -28,7 +28,7 @@ return array(
 	|
 	*/
 
-	'country' => 'Kenya',
+	'country' => 'Mozambique',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -38,7 +38,7 @@ return array(
 	*/
 
 	'organization' => 'Basic Laboratory Information System',
-	
+
 
 
 	/*
@@ -52,7 +52,7 @@ return array(
                     P.O. BOX PRIVATE BAG,<br>
                     KENYA.<br>
                     Phone: +0000000 Ext 203/208</p>',
-	
+
 	/*
 	|--------------------------------------------------------------------------
 	|	Organization Logo
@@ -61,7 +61,7 @@ return array(
 	*/
 
 	'organization-logo' => '../i/iLabAfrica_Logo.png',
-	
+
 	/*
 	|--------------------------------------------------------------------------
 	|	Pagination: Items to show per page
@@ -76,7 +76,7 @@ return array(
 	|	Sanitas inbound results URL
 	*/
 	'sanitas-url' => 'localhost',
-	
+
 	/*
 	|--------------------------------------------------------------------------
 	|	Limit: Maximum number of items to return (Use in patient search)
@@ -115,5 +115,6 @@ return array(
 	|
 	*/
 
-	'c4g-credit'	=>	'A port of the Basic Laboratory Information System (BLIS) to Laravel by iLabAfrica. BLIS was originally developed by C4G.'
+	'c4g-credit'	=>	'A port of the Basic Laboratory Information System (BLIS) to
+		Laravel by iLabAfrica. BLIS was originally developed by C4G.'
 );
