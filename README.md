@@ -1,29 +1,20 @@
-![image](https://travis-ci.org/ilabafrica/iBLIS.svg?branch=master)
 
-BLIS (Branch Laravel 5.1 of iLabAfrica )
+
+BLIS (Branch Laravel 5.1 of eSaude )
 =====
 
 BLIS is a port of the Basic Laboratory Information System (<a href="https://github.com/C4G/BLIS">BLIS</a>) to the Laravel PHP Framework by iLabAfrica.
 BLIS was originally developed by C4G.
 
-You can test and view the application [here](http://blis.ilabafrica.ac.ke:8080/).
-
-Requirements
-------------
-1. Supported database. Currently only <a href='http://dev.mysql.com/downloads/mysql/'>MySQL</a> has been tested. Laravel also supports PostgreSQL, SQLite and SQL Server.
-2. <a href='http://php.net/'>PHP</a> (>= 5.4).
-3. <a href='https://getcomposer.org/'>Composer</a> - Dependency manager for PHP.
-
 Installation
 -----------
 ##### DOCKER
-The easiest way to install is using docker, follow instruction [here](https://github.com/ilabafrica/iblis-contrib-docker) to install via docker.
 
 ##### FROM SOURCE
 
 1. Install the above mentioned requirements.
 2. Download the source code to your computer
-    <blockquote>https://github.com/ilabafrica/iBLIS/archive/2.6.zip </blockquote>
+
 3. Change directory to the root folder of the application. Update **composer** then run it in order to install the application dependencies. You may need root permissions to update composer.
     <blockquote>
       composer self-update<br />
