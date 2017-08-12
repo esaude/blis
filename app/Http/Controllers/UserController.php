@@ -1,11 +1,13 @@
 <?php namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\AuthRequest;
 use App\Models\User;
 use Hash;
+
 class UserController extends Controller {
 
 	/**
@@ -17,8 +19,15 @@ class UserController extends Controller {
 	{
 		//	Get all users
 		$users = User::all();
-		// Display to Blade view
-//		return view('user.index', compact('users'));
+
+		return view('user.index', compact('users'));
+
+	}
+
+	public function users() {
+		//	Get all users
+		$users = User::all();
+
 		// RESTful API
 		return response()->json([
 			'type' => 'users',
@@ -61,14 +70,32 @@ class UserController extends Controller {
         	$user->image = $this->imageModifier($request, $request->all()['photo']);
         $user->save();
 
-//			Response on the Blade VIEW
-//        return redirect('user')->with('message', 'User created successfully.');
+        return redirect('user')->with('message', 'User created successfully.');
 
-			// RESTful response
-			return response()->json([
-				'message' => 'User created',
-				'user_id' => $user-id
-			], 200);
+	}
+
+	public function newUser(UserRequest $request){
+		$user = new User;
+		$user->name = $request->name;
+		$user->gender = $request->gender;
+		$user->email = $request->email;
+		$user->phone = $request->phone;
+		$user->username = $request->username;
+		$user->address = $request->address;
+		$user->designation = $request->designation;
+		if($request->default_password)
+			$user->password = Hash::make(User::DEFAULT_PASSWORD);
+		else
+			$user->password = Hash::make($request->password);
+		if($request->hasFile('photo'))
+			$user->image = $this->imageModifier($request, $request->all()['photo']);
+		$user->save();
+
+		// RESTful response
+		return response()->json([
+			'message' => 'User created',
+			'user_id' => $user->id
+		], 200);
 	}
 
 	/**
@@ -82,14 +109,19 @@ class UserController extends Controller {
 		//	Get user
 		$user = User::find($id);
 
+//		Response on the Blade VIEW
+		return view('user.show', compact('user'));
+	}
+
+	public function get($id) {
+		//	Get user
+		$user = User::find($id);
+
 		// Response if no user found
 		if(!count($user))
-		return response()->json([
-			'message' => 'Not Found User'
-		], 404);
-
-		//Response on the Blade VIEW
-//		return view('user.show', compact('user'));
+			return response()->json([
+				'message' => 'Not Found User'
+			], 404);
 
 		//RESTful response
 		return response()->json([
@@ -116,7 +148,7 @@ class UserController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update(AuthRequest $request, $id)
+	public function update(UserRequest $request, $id)
 	{
 		//	Get user
 		$user = User::find($id);
@@ -138,13 +170,7 @@ class UserController extends Controller {
         $user->save();
 
 		//Response on Blade VIEW
-//        return redirect('/')->with('message', 'User updated successfully.');
-
-		//RESTful response
-		return response()->json([
-			'message' => 'User updated',
-			'user_id' => $user->id
-		], 200);
+        return redirect('/')->with('message', 'User updated successfully.');
 	}
 
 	/**
@@ -154,9 +180,55 @@ class UserController extends Controller {
 	 * @return Response
 	 */
 
+	public function alter(Request $request, $id) {
+		//	Get user
+
+		$user = User::find($id);
+		dd($user);
+
+		if(!count($user))
+			return response()->json([
+				'messge' => 'User not found',
+			], 404);
+
+		$user->name = $request->name;
+		$user->gender = $request->gender;
+		$user->email = $request->email;
+		$user->phone = $request->phone;
+		$user->address = $request->address;
+		$user->designation = $request->designation;
+		if($request->default_password)
+			$user->password = Hash::make(User::DEFAULT_PASSWORD);
+		else
+			$user->password = Hash::make($request->password);
+		if($request->hasFile('photo'))
+			$user->image = $this->imageModifier($request, $request->all()['photo']);
+		$user->save();
+
+		//RESTful response
+		return response()->json([
+			'message' => 'User updated',
+			'user_id' => $user->id
+		], 200);
+	}
+
 	public function delete($id)
 	{
 		$user= User::find($id);
+
+		$user->delete();
+
+		//Response on Blade VIEW
+		return redirect('user')->with('message', 'User deleted successfully.');
+	}
+	public function destroy($id)
+	{
+		//
+	}
+
+	public function remove($id)
+	{
+		$user = User::find($id); 
 
 		if(!count($user))
 			return response()->json([
@@ -165,19 +237,12 @@ class UserController extends Controller {
 
 		$user->delete();
 
-		//Response on Blade VIEW
-//		return redirect('user')->with('message', 'User deleted successfully.');
-
 		//RESTful response
 		return response()->json([
 			'message' => 'User deleted'
 		], 200);
-		
 	}
-	public function destroy($id)
-	{
-		//
-	}
+
 	/**
      * Change the image name, move it to images/profile, and return its new name
      *

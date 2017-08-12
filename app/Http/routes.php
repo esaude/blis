@@ -543,16 +543,19 @@ Route::group(array('middleware' => ['auth']), function()
  *  RESTful API Routes
  */
 
+//Routes accessible BEFORE login with Rest API
 Route::group(array("before" => "guest", "prefix"=> "api/v1"), function() {
     Route::post('/user/login', [
         'as' => 'api.login',
         'uses' => 'Auth\RestAuthController@authenticate'
     ]);
+
 });
 
+//Routes accessible AFTER login with Rest API
 Route::group(array("prefix" => "api/v1", "middleware" => "jwt.auth"), function()
 {
-    //Auth with Rest API
+
     Route::get('/user/authenticate', [
         'as' => 'api.user.authenticate',
         'uses' => 'Auth\RestAuthController@getAuthenticatedUser'
@@ -562,4 +565,29 @@ Route::group(array("prefix" => "api/v1", "middleware" => "jwt.auth"), function()
         'as' => 'api.user.logout',
         'uses' => 'Auth\RestAuthController@logout'
     ]);
+
+
+    Route::get('/user/{id}', array(
+        'as' => 'api.user.get',
+        'uses' => 'UserController@get'
+    ));
+    Route::get('/users', array(
+        'as' => 'api.user.users',
+        'uses' => 'UserController@users'
+    ));
+
+    Route::post('/users', array(
+        'as' => 'api.user.user',
+        'uses' => 'UserController@newUser'
+    ));
+
+    Route::match(['put', 'patch'], '/user/{id}', array(
+        'as' => 'api.user.update',
+        'uses' => 'UserController@alter'
+    ));
+
+    Route::delete('/user/{id}', array(
+        'as' => 'api.user.remote',
+        'uses' => 'UserController@remove'
+    ));
 });
