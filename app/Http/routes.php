@@ -16,7 +16,7 @@ Route::group(array("before" => "guest"), function()
     |-----------------------------------------
     | API route
     |-----------------------------------------
-    | Proposed route for the BLIS api, we will receive api calls 
+    | Proposed route for the BLIS api, we will receive api calls
     | from other systems from this route.
     */
 
@@ -39,7 +39,11 @@ Route::group(array("before" => "guest"), function()
         "as" => "api.receiver",
         "uses" => "InterfacerController@receiveLabRequest"
     ));
-    
+
+    Route::get('/user/logout', [
+        'as' => 'user.logout',
+        'uses' => 'AuthController@logout'
+    ]);
 });
 
 /* Routes accessible AFTER logging in */
@@ -57,7 +61,7 @@ Route::group(array('middleware' => ['auth']), function()
             "uses" => "UserController@delete"
         ));
     });
-    
+
     Route::any('/user/{id}/updateown', array(
         "as" => "user.updateOwnPassword",
         "uses" => "UserController@updateOwnPassword"
@@ -89,13 +93,13 @@ Route::group(array('middleware' => ['auth']), function()
             "uses" => "SpecimenTypeController@delete"
         ));
         Route::resource('testcategory', 'TestCategoryController');
-        
+
         Route::any("/testcategory/{id}/delete", array(
             "as"   => "testcategory.delete",
             "uses" => "TestCategoryController@delete"
         ));
         Route::resource('measure', 'MeasureController');
-    
+
         Route::get("/measure/{id}/delete", array(
             "as"   => "measure.delete",
             "uses" => "MeasureController@delete"
@@ -115,26 +119,26 @@ Route::group(array('middleware' => ['auth']), function()
             "uses" => "SpecimenRejectionController@destroy"
         ));
         Route::resource('drug', 'DrugController');
-        
+
         Route::get("/drug/{id}/delete", array(
             "as"   => "drug.delete",
             "uses" => "DrugController@delete"
         ));
         Route::resource('organism', 'OrganismController');
-        
+
         Route::get("/organism/{id}/delete", array(
             "as"   => "organism.delete",
             "uses" => "OrganismController@delete"
         ));
         Route::resource('critical', 'CriticalController');
-        
+
         Route::get("/critical/{id}/delete", array(
             "as"   => "critical.delete",
             "uses" => "CriticalController@delete"
         ));
 
         Route::resource('microcritical', 'MicroCriticalController');
-        
+
         Route::get("/microcritical/{id}/delete", array(
             "as"   => "microcritical.delete",
             "uses" => "MicroCriticalController@delete"
@@ -304,7 +308,7 @@ Route::group(array('middleware' => ['auth']), function()
             "uses" => "BlisClientController@properties"
         ));
     });
-    
+
     //  Check if able to manage reports
     Route::group(array('middleware' => ['permission:view_reports']), function()
     {
@@ -313,11 +317,11 @@ Route::group(array('middleware' => ['auth']), function()
             "uses" => "ReportController@loadPatients"
         ));
         Route::any("/patientreport/{id}", array(
-            "as" => "reports.patient.report", 
+            "as" => "reports.patient.report",
             "uses" => "ReportController@viewPatientReport"
         ));
         Route::any("/patientreport/{id}/{visit}/{testId?}", array(
-            "as" => "reports.patient.report", 
+            "as" => "reports.patient.report",
             "uses" => "ReportController@viewPatientReport"
         ));
         Route::any("/dailylog", array(
@@ -348,7 +352,7 @@ Route::group(array('middleware' => ['auth']), function()
             "as"   => "reports.aggregate.infection",
             "uses" => "ReportController@infectionReport"
         ));
-        
+
         Route::any("/userstatistics", array(
             "as"   => "reports.aggregate.userStatistics",
             "uses" => "ReportController@userStatistics"
@@ -363,7 +367,7 @@ Route::group(array('middleware' => ['auth']), function()
             "as"   => "reports.aggregate.cd4",
             "uses" => "ReportController@cd4"
         ));
-        
+
         Route::get("/qualitycontrol", array(
             "as"   => "reports.qualityControl",
             "uses" => "ReportController@qualityControl"
@@ -421,7 +425,7 @@ Route::group(array('middleware' => ['auth']), function()
             "as" => "control.resultsEdit",
             "uses" => "ControlController@resultsEdit"
         ));
-    
+
         Route::get("controlresults/{controlId}/resultsList", array(
             "as" => "control.resultsList",
             "uses" => "ControlController@resultsList"
@@ -438,7 +442,7 @@ Route::group(array('middleware' => ['auth']), function()
             'uses' => 'ControlController@resultsUpdate'
         ));
     });
-    
+
     Route::group(array('middleware' => ['permission:request_topup']), function()
     {
         //top-ups
@@ -472,7 +476,7 @@ Route::group(array('middleware' => ['auth']), function()
         ));
         //Suppliers
         Route::resource('supplier', 'SupplierController');
-        
+
         Route::get("/supplier/{id}/delete", array(
             "as"   => "supplier.delete",
             "uses" => "SupplierController@delete"
@@ -533,4 +537,29 @@ Route::group(array('middleware' => ['auth']), function()
     // Billing
     Route::resource('charge', 'ChargeController');
     Route::resource('payment', 'PaymentController');
+});
+
+/**
+ *  RESTful API Routes
+ */
+
+Route::group(array("before" => "guest", "prefix"=> "api/v1"), function() {
+    Route::post('/user/login', [
+        'as' => 'api.login',
+        'uses' => 'Auth\RestAuthController@authenticate'
+    ]);
+});
+
+Route::group(array("prefix" => "api/v1", "middleware" => "jwt.auth"), function()
+{
+    //Auth with Rest API
+    Route::get('/user/authenticate', [
+        'as' => 'api.user.authenticate',
+        'uses' => 'Auth\RestAuthController@getAuthenticatedUser'
+    ]);
+
+    Route::get('user/logout', [
+        'as' => 'api.user.logout',
+        'uses' => 'Auth\RestAuthController@logout'
+    ]);
 });

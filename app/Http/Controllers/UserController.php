@@ -17,7 +17,14 @@ class UserController extends Controller {
 	{
 		//	Get all users
 		$users = User::all();
-		return view('user.index', compact('users'));
+		// Display to Blade view
+//		return view('user.index', compact('users'));
+		// RESTful API
+		return response()->json([
+			'type' => 'users',
+			'counts' => count($users),
+			'users' => $users,
+		], 200);
 	}
 
 	/**
@@ -54,7 +61,14 @@ class UserController extends Controller {
         	$user->image = $this->imageModifier($request, $request->all()['photo']);
         $user->save();
 
-        return redirect('user')->with('message', 'User created successfully.');
+//			Response on the Blade VIEW
+//        return redirect('user')->with('message', 'User created successfully.');
+
+			// RESTful response
+			return response()->json([
+				'message' => 'User created',
+				'user_id' => $user-id
+			], 200);
 	}
 
 	/**
@@ -67,7 +81,20 @@ class UserController extends Controller {
 	{
 		//	Get user
 		$user = User::find($id);
-		return view('user.show', compact('user'));
+
+		// Response if no user found
+		if(!count($user))
+		return response()->json([
+			'message' => 'Not Found User'
+		], 404);
+
+		//Response on the Blade VIEW
+//		return view('user.show', compact('user'));
+
+		//RESTful response
+		return response()->json([
+			'user' => $user
+		], 200);
 	}
 
 	/**
@@ -93,6 +120,9 @@ class UserController extends Controller {
 	{
 		//	Get user
 		$user = User::find($id);
+		if(!count($user))
+			App::abort(404, 'message');
+
 		$user->name = $request->name;
         $user->gender = $request->gender;
         $user->email = $request->email;
@@ -107,7 +137,14 @@ class UserController extends Controller {
         	$user->image = $this->imageModifier($request, $request->all()['photo']);
         $user->save();
 
-        return redirect('/')->with('message', 'User updated successfully.');
+		//Response on Blade VIEW
+//        return redirect('/')->with('message', 'User updated successfully.');
+
+		//RESTful response
+		return response()->json([
+			'message' => 'User updated',
+			'user_id' => $user->id
+		], 200);
 	}
 
 	/**
@@ -120,8 +157,22 @@ class UserController extends Controller {
 	public function delete($id)
 	{
 		$user= User::find($id);
+
+		if(!count($user))
+			return response()->json([
+				'message' => 'User not found'
+			], 404);
+
 		$user->delete();
-		return redirect('user')->with('message', 'User deleted successfully.');
+
+		//Response on Blade VIEW
+//		return redirect('user')->with('message', 'User deleted successfully.');
+
+		//RESTful response
+		return response()->json([
+			'message' => 'User deleted'
+		], 200);
+		
 	}
 	public function destroy($id)
 	{
@@ -134,14 +185,17 @@ class UserController extends Controller {
      * @param $data
      * @return string
      */
-    private function imageModifier($request, $image)
+    private function imageModifier($request, $image_b64)
     {
-        if(empty($image)){
-            $filename = 'default.png';
-        }else{
-            $ext = $request->file('photo')->getClientOriginalExtension();
-            $filename = uniqid() . "." . $ext;
-            $request->file('photo')->move('images/profiles/', $filename);
+		$filename = 'default.png';
+
+        if(empty($image_b64)){
+            return $filename;
+        } else {
+			$base64_str = substr($image_b64, strpos($image_b64, ", ")+1); //get the image
+			$image = base64_decode($base64_str); //decode the image
+			$filename = '/images/profiles/'.uniqid().".png";
+			file_put_contents(public_path().$filename, $image);//move the image to the desired path with the desired name and extension
         }
         return $filename;
     }

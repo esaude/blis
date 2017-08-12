@@ -162,11 +162,14 @@ return [
          * Vendor...
          */
 
+
         Zizaco\Entrust\EntrustServiceProvider::class,
         // todo: deal with the bindshare error it is causing
         // Milon\Barcode\BarcodeServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Jenssegers\Date\DateServiceProvider::class,
+        Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
+
     ],
 
     /*
@@ -214,6 +217,8 @@ return [
         'URL'       => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
+        'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
+        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
 
         /**
          *   Vendor
