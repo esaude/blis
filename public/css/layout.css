@@ -129,6 +129,12 @@ label, input {
     line-height: 34px;
 }
 
+.help-block {
+    display: inline-block;
+    position: relative;
+    left: 0.5em;
+}
+
 /*
 *
 * LOGIN PAGE 
@@ -667,3 +673,11 @@ table.table.report-table-border > tbody > tr > td{
         opacity: .8;
     }
     /*** End button colors ***/
+
+#errorMessage {
+    margin: 1em auto;
+    font-weight: 500;
+}
+.error-message {
+    color: #a94442;
+}

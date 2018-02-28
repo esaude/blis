@@ -681,6 +681,102 @@ $(function(){
 		}
 	}
 
+
+	/*
+	 * general validator object
+	 * for validating fields
+	 */
+	var FieldValidator = function() {
+		this.isValueEmpty = function(str) {
+			str = str || '';
+			return str === '' || str === null || str === undefined;
+		}
+		this.validateName = function(name) {
+			var errorMessage = '';
+			if (this.isValueEmpty(name)) {
+				errorMessage = 'Name is required.';
+			}
+			return errorMessage;
+		};
+		this.validateAddress = function(address) {
+			var errorMessage = '';
+			if (this.isValueEmpty(address)) {
+				errorMessage = 'Address is required.';
+			}
+			return errorMessage;
+		};
+		this.validateAge = function(age) {
+			var errorMessage = '';
+			if (this.isValueEmpty(age)) {
+				errorMessage = 'Age is required.';
+		    } else {
+		    	if (!/(\d)?\d/.test(age)) {
+		    		errorMessage = 'Age must be a number.';
+		    	}
+		    }
+		    return errorMessage;
+		};
+		this.validateDOB = function(dob) {
+			dob = dob || '';
+			var errorMessage = '';
+			//yyyy-mm-dd format
+			var dateFormat = /^\d{4}[\-](0?[1-9]|1[012])[\-](0?[1-9]|[12][0-9]|3[01])$/;
+			if(dob.match(dateFormat)) {
+				var dobArray = dob.split("-");
+				var y = dobArray[0] || false;
+				var m = dobArray[1] || false;
+				var d = dobArray[2] || false;
+				var date = new Date(parseInt(y),parseInt(m)-1,parseInt(d));
+            	var today = new Date();
+            	if (date.getFullYear() === parseInt(y) && ((date.getMonth() + 1) === parseInt(m)) && date.getDate() === parseInt(d)) {
+	                if (date.setHours(0,0,0,0) > today.setHours(0,0,0,0)) {
+	                    errorMessage = 'Birthdate must be in the past.';
+	                }
+	            } else {
+	            	errorMessage = 'Birthdate must be a valid date.';
+	            }
+
+			} else {
+				errorMessage = 'Birthdate must not be empty and must be in required format (yyyy-mm-dd).';
+			}
+			return errorMessage;
+		};
+	}
+
+	$(document).ready(function() {
+		$(".standard-datepicker").datepicker('option', 'onSelect', function() {
+			$(this).next('.error-message').html('');
+		});
+		/* 
+		 * applying validations specific to fields in patient creation form
+		 */
+		$('#form-create-patient').on('submit', function (e) {
+			var errorMessage = "";
+		  	var arrErrorMessage = [];
+		  	var fobj = new FieldValidator();
+
+		    //validations
+		    arrErrorMessage.push(fobj.validateName($("#name").val()));
+			arrErrorMessage.push(fobj.validateDOB($('#dob').val()));
+			arrErrorMessage.push(fobj.validateAddress($('#address').val()));
+			arrErrorMessage = $.grep(arrErrorMessage, function(message) {
+				return message !== "";
+			});
+			if (arrErrorMessage.length > 0) {
+				errorMessage = arrErrorMessage.join("<br/>");
+			}
+
+			if (errorMessage) {
+				$('#errorMessage').html(errorMessage);
+				return false;
+			} else {
+				$('#errorMessage').html('');
+				return true;
+			}
+		});
+	});
+
+
 	//DataTables search functionality
 	$(document).ready( function () {
 		$('.search-table').DataTable({
