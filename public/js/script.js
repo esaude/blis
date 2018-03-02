@@ -812,7 +812,6 @@ $(function(){
 		    	if (dataType) {
 			    	switch(dataType.toLowerCase()) {
 			    		case "select":
-			    				console.log("selected? " + field.find('option:selected').length)
 			    				if ($.trim(field.val()) === "" || (field.find('option:selected').length === 0)) errorMessage = self.getFieldDisplayName(field) + ' is required.';
 			    			break;
 			    		case "checkbox":
