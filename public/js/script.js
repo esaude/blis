@@ -788,7 +788,7 @@ $(function(){
 					var date = new Date(parseInt(y),parseInt(m)-1,parseInt(d));
 	            	var today = new Date();
 	            	if (date.getFullYear() === parseInt(y) && ((date.getMonth() + 1) === parseInt(m)) && date.getDate() === parseInt(d)) {
-		                if (date.setHours(0,0,0,0) > today.setHours(0,0,0,0)) {
+	            		if (date.setHours(0,0,0,0) > today.setHours(0,0,0,0)) {
 		  					errorMessage = displayName + ' must be in the past.';
 		                }
 		            } else {
