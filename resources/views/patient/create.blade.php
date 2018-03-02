@@ -14,15 +14,14 @@
 		</div>
 		<div class="panel-body">
 		<!-- if there are creation errors, they will show here -->
-			
+
 			@if($errors->all())
 				<div class="alert alert-danger">
 					{{ HTML::ul($errors->all()) }}
 				</div>
 			@endif
 
-			{{ Form::open(array('url' => 'patient', 'id' => 'form-create-patient')) }}
-				<div id="errorMessage" class="error-message"></div>
+			{{ Form::open(array('url' => 'patient', 'id' => 'form-create-patient', 'data-validate' => 'true')) }}
 				<div class="form-group">
 					{{ Form::label('patient_number', trans('messages.patient-number')) }}
 					{{ Form::text('patient_number', $lastInsertId,
@@ -30,13 +29,13 @@
 				</div>
 				<div class="form-group">
 					{{ Form::label('name', trans('messages.names')) }}
-					{{ Form::text('name', Input::old('name'), array('class' => 'form-control')) }}
+					{{ Form::text('name', Input::old('name'), array('class' => 'form-control', "data-required" => "true", "data-display-name" => trans('Name'))) }}
                     <div class="help-block error-message"></div>
 				</div>
 				<div class="form-group">
 					{{ Form::label('dob', trans('messages.date-of-birth')) }}
-					{{ Form::text('dob', Input::old('dob'), 
-						array('class' => 'form-control standard-datepicker')) }}
+					{{ Form::text('dob', Input::old('dob'),
+						array('class' => 'form-control standard-datepicker', "data-required" => "true", "data-type" => "date", "data-display-name" => trans('Birth Date'))) }}
 					<div class="help-block error-message"></div>
 				</div>
 				<div class="form-group">
@@ -48,7 +47,8 @@
 				</div>
 				<div class="form-group">
 					{{ Form::label('address', trans('messages.physical-address')) }}
-					{{ Form::text('address', Input::old('address'), array('class' => 'form-control')) }}
+					{{ Form::text('address', Input::old('address'), array('class' => 'form-control', "data-required" => "true", "data-display-name" => trans('Address'))) }}
+					<div class="help-block error-message"></div>
 				</div>
 				<div class="form-group">
 					{{ Form::label('phone_number', trans('messages.phone-number')) }}
@@ -58,12 +58,13 @@
 					{{ Form::label('email', trans('messages.email-address')) }}
 					{{ Form::email('email', Input::old('email'), array('class' => 'form-control')) }}
 				</div>
+				<div id="errorMessage" class="error-message"></div>
 				<div class="form-group actions-row">
-					{{ Form::button('<span class="glyphicon glyphicon-save"></span> '.trans('messages.save'), 
+					{{ Form::button('<span class="glyphicon glyphicon-save"></span> '.trans('messages.save'),
 						['class' => 'btn btn-primary', 'type' => 'submit', 'id' => 'btnCreatePatientSubmit']) }}
 				</div>
 
 			{{ Form::close() }}
 		</div>
 	</div>
-@stop	
+@stop

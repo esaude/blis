@@ -33,7 +33,7 @@
 				</div>
 			@endif
 
-			{{ Form::open(array('route' => 'test.saveNewTest', 'id' => 'form-new-test')) }}
+			{{ Form::open(array('route' => 'test.saveNewTest', 'id' => 'form-new-test', 'data-validate' => 'true')) }}
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-md-12">
@@ -53,11 +53,13 @@
 								{{ Form::hidden('patient_id', $patient->id) }}
 								{{ Form::label('visit_type', trans("messages.visit-type")) }}
 								{{ Form::select('visit_type', [' ' => '--- Select visit type ---','0' => trans("messages.out-patient"),'1' => trans("messages.in-patient")], null,
-									 array('class' => 'form-control')) }}
+									 array('class' => 'form-control', 'data-required' => 'true', 'data-display-name' => trans('Visit type'))) }}
+								<div class="help-block with-errors"></div>
 							</div>
 							<div class="form-group">
 								{{ Form::label('physician', trans("messages.physician")) }}
-								{{Form::text('physician', Input::old('physician'), array('class' => 'form-control'))}}
+								{{Form::text('physician', Input::old('physician'), array('class' => 'form-control', 'data-required' => 'true', 'data-display-name' => trans('Physician')))}}
+								<div class="help-block with-errors"></div>
 							</div>
 							<div class="form-group">
 								{{ Form::label('tests', trans("messages.select-tests")) }}
@@ -76,19 +78,20 @@
 										<tr>
 											<td>{{ $value->name }}</td>
 											<td><label  class="editor-active">
-												<input type="checkbox" name="testtypes[]" value="{{ $value->id}}" />
+												<input type="checkbox" name="testtypes[]" value="{{ $value->id}}"  data-required="true" data-display-name="{{trans('Test Type')}}"/>
 												</label>
 											</td>
 										</tr>
 									@endforeach
 									</tbody>
 						            </table>
-				
-								<div class="form-group actions-row">
-								{{ Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save-test'), 
-									array('class' => 'btn btn-primary', 'onclick' => 'submit()', 'alt' => 'save_new_test')) }}
+						            <div class="help-block with-error"></div>
+						            <div id="errorMessage"></div>
+									<div class="form-group actions-row">
+									{{ Form::button("<span class='glyphicon glyphicon-save'></span> ".trans('messages.save-test'), 
+										array('class' => 'btn btn-primary', 'type' => 'submit', 'alt' => 'save_new_test')) }}
+									</div>
 								</div>
-						</div>
 					</div>
 				</div>
 

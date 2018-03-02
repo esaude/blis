@@ -677,6 +677,7 @@ table.table.report-table-border > tbody > tr > td{
 #errorMessage {
     margin: 1em auto;
     font-weight: 500;
+    color: #a94442;
 }
 .error-message {
     color: #a94442;
