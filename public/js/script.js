@@ -789,7 +789,7 @@ $(function(){
 	            	var today = new Date();
 	            	if (date.getFullYear() === parseInt(y) && ((date.getMonth() + 1) === parseInt(m)) && date.getDate() === parseInt(d)) {
 		                if (date.setHours(0,0,0,0) > today.setHours(0,0,0,0)) {
-		                    errorMessage = displayName + ' must be in the past.';
+		  					errorMessage = displayName + ' must be in the past.';
 		                }
 		            } else {
 		            	errorMessage = displayName + ' must be a valid date.';
@@ -812,7 +812,7 @@ $(function(){
 		    	if (dataType) {
 			    	switch(dataType.toLowerCase()) {
 			    		case "select":
-			    				if ($.trim(field.val()) === "" || (field.find('option:selected').length === 0)) errorMessage = self.getFieldDisplayName(field) + ' is required.';
+			    			if ($.trim(field.val()) === "" || (field.find('option:selected').length === 0)) errorMessage = self.getFieldDisplayName(field) + ' is required.';
 			    			break;
 			    		case "checkbox":
 			    		case "radio":
@@ -845,7 +845,7 @@ $(function(){
 		    requiredFields.each(function() {
 		    	arrErrorMessage.push(self.validateFieldByType($(this)));
 		    });
-			arrErrorMessage = $.grep(arrErrorMessage, function(message, index) {
+		    arrErrorMessage = $.grep(arrErrorMessage, function(message, index) {
 				return message !== '' && arrErrorMessage.indexOf(message) === index;
 			});
 			if (arrErrorMessage.length > 0) {
