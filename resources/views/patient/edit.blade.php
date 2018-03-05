@@ -19,20 +19,22 @@
 				</div>
 			@endif
 			{{ Form::model($patient, array('route' => array('patient.update', $patient->id), 'method' => 'PUT',
-				'id' => 'form-edit-patient')) }}
+				'id' => 'form-edit-patient', 'data-validate' => 'true')) }}
 
 				<div class="form-group">
 					{{ Form::label('patient_number', trans('messages.patient-number')) }}
-					{{ Form::text('patient_number', Input::old('patient_number'), 
+					{{ Form::text('patient_number', Input::old('patient_number'),
 						array('class' => 'form-control', 'readonly')) }}
 				</div>
 				<div class="form-group">
 					{{ Form::label('name', trans_choice('messages.name',1)) }}
-					{{ Form::text('name', Input::old('name'), array('class' => 'form-control')) }}
+					{{ Form::text('name', Input::old('name'), array('class' => 'form-control', "data-required" => "true", "data-display-name" => trans('Name'))) }}
+					<div class="help-block error-message"></div>
 				</div>
 				<div class="form-group">
 					{{ Form::label('dob', trans('messages.date-of-birth')) }}
-					{{ Form::text('dob', Input::old('dob'), array('class' => 'form-control standard-datepicker')) }}
+					{{ Form::text('dob', Input::old('dob'), array('class' => 'form-control standard-datepicker', "data-required" => "true", "data-type" => "date", "data-display-name" => trans('Birth Date'))) }}
+					<div class="help-block error-message"></div>
 				</div>
                 <div class="form-group">
                     {{ Form::label('gender', trans('messages.gender')) }}
@@ -43,7 +45,8 @@
                 </div>
 				<div class="form-group">
 					{{ Form::label('address', trans('messages.physical-address')) }}
-					{{ Form::text('address', Input::old('address'), array('class' => 'form-control')) }}
+					{{ Form::text('address', Input::old('address'), array('class' => 'form-control',  "data-required" => "true", "data-display-name" => trans('Address'))) }}
+					<div class="help-block error-message"></div>
 				</div>
 				<div class="form-group">
 					{{ Form::label('phone_number', trans('messages.phone-number')) }}
@@ -53,12 +56,12 @@
 					{{ Form::label('email', trans('messages.email-address')) }}
 					{{ Form::email('email', Input::old('email'), array('class' => 'form-control')) }}
 				</div>
+				<div id="errorMessage" class="error-message"></div>
 				<div class="form-group actions-row">
 					{{ Form::button('<span class="glyphicon glyphicon-save"></span> '.trans('messages.save'),
-						 array('class' => 'btn btn-primary', 'onclick' => 'submit()')) }}
+						 array('class' => 'btn btn-primary', 'type' => 'submit')) }}
 				</div>
-
 			{{ Form::close() }}
 		</div>
 	</div>
-@stop	
+@stop

@@ -15,7 +15,7 @@ $(function(){
 	});
 
 	/*	LEFT SIDEBAR FUNCTIONS	*/
-	
+
 	/*  Click main menu */
 	$('.main-menu').click(function(){
 
@@ -26,7 +26,7 @@ $(function(){
 		$(this).siblings().show();
 	});
 
-	/**  USER 
+	/**  USER
 	 *-  Load password reset input field
 	 */
 
@@ -43,8 +43,8 @@ $(function(){
 			editUserProfile();
 	});
 
-	/** 
-	 *	LAB CONFIGURATION 
+	/**
+	 *	LAB CONFIGURATION
 	 */
 
 	 /* Add another surveillance */
@@ -58,7 +58,7 @@ $(function(){
 		addNewSurveillanceAttributes(newSurveillanceNo);
 		delete newSurveillanceNo;
 	});
-	 
+
 	 /* Add another disease */
 	$('.add-another-disease').click(function(){
 		newDiseaseNo = $(this).data('new-disease');
@@ -71,8 +71,8 @@ $(function(){
 		delete newDiseaseNo;
 	});
 
-	/** 
-	 *	Ordering measures  
+	/**
+	 *	Ordering measures
 	 */
 	if(typeof sortable('.sortable')[0] != 'undefined'){
 		sortable('.sortable')[0].addEventListener('sortupdate', function(e) {
@@ -124,7 +124,7 @@ $(function(){
 			'.alphanumericInputLoader',
 			'.alphanumericInputLoader',
 			'.freetextInputLoader'
-		]; 
+		];
 
 		if ($(this).data('measure-id') === 0) {
 			var newMeasureId = $(this).data('new-measure-id');
@@ -153,7 +153,7 @@ $(function(){
 		}
 	}
 
-	/** GLOBAL DELETE	
+	/** GLOBAL DELETE
 	 *	Alert on irreversible delete
 	 */
 	$('.confirm-delete-modal').on('show.bs.modal', function(e) {
@@ -183,7 +183,7 @@ $(function(){
 	$('.measure-container').on('click', '.close', function(){
 		$(this).parent().parent().remove();
 	});
-	
+
 	// Delete Surveillance entry
 
 	$('.surveillance-input').on('click', '.close', function(){
@@ -196,7 +196,7 @@ $(function(){
 		$(this).parent().parent().parent().remove();
 	});
 
-	/** 
+	/**
 	 * Fetch Test results
 	 */
 
@@ -212,7 +212,7 @@ $(function(){
 	});
 
 
-	/** 
+	/**
 	 * Fetch Test results
 	 */
 
@@ -226,7 +226,7 @@ $(function(){
 		});
 	});
 
-	/** 
+	/**
 	 * Search for patient from new test modal
 	 * UI Rendering Logic here
 	 */
@@ -256,7 +256,7 @@ $(function(){
 	});
 
 
-	/* 
+	/*
 	* Prevent patient search modal form submit (default action) when the ENTER key is pressed
 	*/
 
@@ -281,7 +281,7 @@ $(function(){
 			$(e.currentTarget).find('.modal-body').html(data);
 		});
 	});
-  
+
 
 	/** Receive Test Request button.
 	 *  - Updates the Test status via an AJAX call
@@ -363,7 +363,7 @@ $(function(){
 		var gender = $(this).data('gender');
 		var measurevalue = $(this).val();
 		var testId = $(this).data('test_id');
-		$.post(url, { 
+		$.post(url, {
 				measureid: measureid,
 				age: age,
 				measurevalue: measurevalue,
@@ -373,7 +373,7 @@ $(function(){
 				//check if critical
 				if(typeof interpretation === "string" && interpretation.toUpperCase() == "CRITICAL"){
 					event.target.style.color = "red"
-					//add to interpretation	
+					//add to interpretation
 					var comments = $( ".result-interpretation" ).val();
 					if(comments.search("CRITICAL VALUES DETECTED")){
 						$( ".result-interpretation" ).val("CRITICAL VALUES DETECTED! "+comments);
@@ -396,7 +396,7 @@ $(function(){
 		var testID = $(this).data('test-id');
 		var url = $(this).data('url');
 		// alert(url);
-		
+
 		$.post(url, { id: testID}).done(function(){});
 		var parent = $(e.currentTarget).parent();
 		// First replace the status
@@ -425,8 +425,8 @@ $(function(){
 
 		/*Dynamic loading of select list options*/
 		$('#section_id').change(function(){
-			$.get("/reports/dropdown", 
-				{ option: $(this).val() }, 
+			$.get("/reports/dropdown",
+				{ option: $(this).val() },
 				function(data) {
 					var test_type = $('#test_type');
 					test_type.empty();
@@ -439,13 +439,13 @@ $(function(){
 		/*End dynamic select list options*/
 				/*Dynamic loading of select list options*/
 		$('#commodity-id').change(function(){
-			$.get("/topup/"+$(this).val()+"/availableStock", 
+			$.get("/topup/"+$(this).val()+"/availableStock",
 				function(data) {
 					$('#current_bal').val(data.availableStock);
 				});
 		});
 		/*End dynamic select list options*/
-		
+
 		/*Toggle summary div for reports*/
 		$('#reveal').click(function(){
 			if ( $('#summary').hasClass('hidden')) {
@@ -515,7 +515,7 @@ $(function(){
 			'.alphanumericHeaderLoader',
 			'.alphanumericHeaderLoader',
 			'.freetextHeaderLoader'
-		]; 
+		];
 		var inputClass = [
 			'.numericInputLoader',
 			'.alphanumericInputLoader',
@@ -662,7 +662,7 @@ $(function(){
 		{
 			$('.new-pwdrepeat-empty').addClass('hidden');
 		}
-		
+
 		if(!error_flag)
 		{
 			if(newpwd1_len != newpwd2_len || newpwd1 != newpwd2)
@@ -680,6 +680,217 @@ $(function(){
 			$('#form-edit-password').submit();
 		}
 	}
+
+
+	/*
+	 * general validator object
+	 * for validating fields in a form
+	 */
+	var FormValidator = function(options) {
+		/*
+		 * can override defaults
+		 * note attributes added to elements for bootstraping validator,
+		 * i.e. form attribute, element attributes
+		 */
+		this.defaultOptions = {
+			forms: $("form[data-validate]"),
+			requiredFields: $("form[data-validate] [data-required]"),
+			errorMessageContainerId: "errorMessage"
+		};
+		this.configOptions = options || {};
+
+		this.setOptions = function(options) {
+			options = this.configOptions||{};
+			var uOptions = this.defaultOptions;
+            for (var key in uOptions) {
+                if (options[key]) {
+                    uOptions[key] = options[key];
+                }
+            };
+            this.configOptions = uOptions;
+            return uOptions;
+		}
+		this.init = function() {
+			var self = this;
+			/*
+			 * set configuration options
+			 */
+			var configOptions = this.setOptions();
+
+			/*
+			 * set up required fields for validation
+			 */
+			var fields = configOptions.requiredFields;
+			fields.each(function() {
+				self.handleFieldEvent($(this));
+			});
+
+			/*
+			 * handle relevant forms submit event
+			 */
+			var forms = configOptions.forms;
+			forms.each(function() {
+				self.handleFormSubmit($(this));
+			});
+
+			if ($('#' + configOptions["errorMessageContainerId"]).length === 0) {
+				forms.each(function() {
+					$(this).append("<div id='" + configOptions['errorMessageContainerId'] + "'></div>");
+				});
+			}
+
+		};
+		this.getFieldDisplayName = function(field) {
+			return field && field.attr('data-display-name') ? field.attr('data-display-name') : 'Field value';
+		}
+		this.isValueEmpty = function(str) {
+			str = str || '';
+			return $.trim(str) === '' || str === null || str === undefined;
+		};
+		this.validateString = function(field) {
+			var errorMessage = '';
+			if (field) {
+				var fieldValue = field.val();
+				if (this.isValueEmpty(fieldValue)) {
+					errorMessage = this.getFieldDisplayName(field) + ' is required.';
+				}
+			}
+			return errorMessage;
+		};
+		this.validateNumber = function(field) {
+			var errorMessage = '';
+			if (field) {
+				var fieldValue = field.val();
+				var displayName = this.getFieldDisplayName(field);
+				if (this.isValueEmpty(fieldValue)) {
+					errorMessage = displayName + ' is required.';
+			    } else {
+			    	if (!/(\d)?\d/.test(fieldValue)) {
+			    		errorMessage = displayName + ' must be a number.';
+			    	}
+			    }
+			}
+		    return errorMessage;
+		};
+		this.validateDate = function(field) {
+			var errorMessage = '';
+			if (field) {
+				var self = this;
+				var displayName = this.getFieldDisplayName(field);
+				var fieldValue = field.val() || '';
+				//yyyy-mm-dd format
+				var dateFormat = /^\d{4}[\-](0?[1-9]|1[012])[\-](0?[1-9]|[12][0-9]|3[01])$/;
+				if(fieldValue.match(dateFormat)) {
+					var dArray = fieldValue.split("-");
+					var y = dArray[0] || false;
+					var m = dArray[1] || false;
+					var d = dArray[2] || false;
+					var date = new Date(parseInt(y),parseInt(m)-1,parseInt(d));
+	            	var today = new Date();
+	            	if (date.getFullYear() === parseInt(y) && ((date.getMonth() + 1) === parseInt(m)) && date.getDate() === parseInt(d)) {
+	            		if (date.setHours(0,0,0,0) > today.setHours(0,0,0,0)) {
+		  					errorMessage = displayName + ' must be in the past.';
+		                }
+		            } else {
+		            	errorMessage = displayName + ' must be a valid date.';
+		            }
+
+				} else {
+					if (!(field.hasClass('hasDatepicker') && field.datepicker( 'widget' ).is(':visible'))) {
+						errorMessage = displayName + ' must not be empty and must be in required format (yyyy-mm-dd).';
+					}
+				}
+			}
+			return errorMessage;
+		};
+		this.validateFieldByType = function(field) {
+			var errorMessage = '';
+			var self = this;
+			var hasError = false;
+			if (field) {
+				var dataType = field.attr('data-type') || field.attr('type') || field.get(0).nodeName;
+		    	if (dataType) {
+			    	switch(dataType.toLowerCase()) {
+			    		case "select":
+			    			if ($.trim(field.val()) === "" || (field.find('option:selected').length === 0)) errorMessage = self.getFieldDisplayName(field) + ' is required.';
+			    			break;
+			    		case "checkbox":
+			    		case "radio":
+			    			var inputFields = $("[name='" + field.attr("name") + "']");
+			    			if (!inputFields.is(":checked")) {
+			    				errorMessage = self.getFieldDisplayName(field) + ' is required.';
+			    			}
+			    			break;
+			    		case "text":
+			    			errorMessage = self.validateString(field);
+			    			break;
+			    		case "number":
+			    			errorMessage = self.validateNumber(field);
+			    			break;
+			    		case "date":
+			    			errorMessage = self.validateDate(field);
+			    			break;
+			    		default:
+			    			errorMessage = self.validateString(field);
+			    	}
+			    }
+			}
+			return errorMessage;
+		};
+		this.setGlobalFormErrorMessage = function() {
+			var self = this;
+			var errorMessage = "";
+		  	var arrErrorMessage = [];
+		    var requiredFields = this.configOptions.requiredFields;
+		    requiredFields.each(function() {
+		    	arrErrorMessage.push(self.validateFieldByType($(this)));
+		    });
+		    arrErrorMessage = $.grep(arrErrorMessage, function(message, index) {
+				return message !== '' && arrErrorMessage.indexOf(message) === index;
+			});
+			if (arrErrorMessage.length > 0) {
+				errorMessage = arrErrorMessage.join("<br/>");
+			}
+			if (errorMessage) {
+				$('#errorMessage').html(errorMessage);
+				return false;
+			} else {
+				$('#errorMessage').html('');
+				return true;
+			}
+		}
+		this.handleFieldEvent = function(field) {
+			var self = this;
+			if (field && field.length > 0) {
+				var triggerEvent = field.attr('type') == 'text' ? 'blur': 'change';
+				field.on(triggerEvent, function() {
+					var errorField = $(this).closest('.form-group').find('.error-message');
+					var errorMessage = self.validateFieldByType($(this));
+					errorField.html(errorMessage?errorMessage:'');
+				});
+			}
+		};
+		this.handleFormSubmit = function(form) {
+			if (form && form.length > 0) {
+				var self = this;
+				form.on('submit', function (e) {
+					return self.setGlobalFormErrorMessage();
+				});
+			};
+		};
+	}
+
+	$(document).ready(function() {
+		$(".standard-datepicker").datepicker('option', 'onSelect', function() {
+			$(this).next('.error-message').html('');
+		});
+		/*
+		 * applying validations specific to fields in forms that require validation
+		 */
+		 var formValidator = new FormValidator();
+		 formValidator.init();
+	});
+
 
 	//DataTables search functionality
 	$(document).ready( function () {
@@ -731,7 +942,7 @@ $(function(){
 	 */
 	function drawCultureWorksheet(tid, user, username){
 		console.log(username);
-		$.getJSON('/culture/storeObservation', { testId: tid, userId: user, action: "draw"}, 
+		$.getJSON('/culture/storeObservation', { testId: tid, userId: user, action: "draw"},
 			function(data){
 				var tableBody ="";
 				$.each(data, function(index, elem){
@@ -753,7 +964,7 @@ $(function(){
 		);
 	}
 
-	/*Begin save drug susceptibility*/	
+	/*Begin save drug susceptibility*/
 	function saveDrugSusceptibility(tid, oid){
 		console.log(oid);
 		var dataString = $("#drugSusceptibilityForm_"+oid).serialize();
@@ -769,7 +980,7 @@ $(function(){
 	/*End save drug susceptibility*/
 	/*Function to render drug susceptibility table after successfully saving the results*/
 	function drawSusceptibility(tid, oid){
-		$.getJSON('/susceptibility/saveSusceptibility', { testId: tid, organismId: oid, action: "results"}, 
+		$.getJSON('/susceptibility/saveSusceptibility', { testId: tid, organismId: oid, action: "results"},
 			function(data){
 				var tableRow ="";
 				var tableBody ="";
@@ -821,7 +1032,7 @@ $(function(){
 		id = $("#client").val();
 		if(id !='0')
 		{
-			$.getJSON('blisclient/details', { equip: id }, 
+			$.getJSON('blisclient/details', { equip: id },
 				function(data)
 				{
 					var html = "<h4 class='text-center'>EQUIPMENT</h4>"+
@@ -850,7 +1061,7 @@ $(function(){
 					"<input type='text' class='form-control' id='config_file' value = '"+data.config_file+"'>"+
 					"</div>"+
 					"<h4 class='text-center'>"+data.feed+" CONFIGURATIONS</h4>";
-					$.getJSON('blisclient/properties', { client: id }, 
+					$.getJSON('blisclient/properties', { client: id },
 						function(data)
 						{
 							$.each(data, function(index, elem)
@@ -868,6 +1079,6 @@ $(function(){
 						}
 					);
 				}
-			);                               
+			);
 		}
 	}
